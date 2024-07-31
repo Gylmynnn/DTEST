@@ -1,5 +1,5 @@
 // pages/index.tsx
-import { useState, FormEvent, useRef } from "react";
+import { useState, FormEvent, useRef, useEffect } from "react";
 import axios from "axios";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -19,7 +19,27 @@ export default function Homepage() {
   const [data, setData] = useState<string>("");
   const [response, setResponse] = useState<any>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const golink = useRef<any>(null);
   useAutosizeTextArea(textAreaRef, data);
+
+
+  useEffect(() => {
+    if (response && golink.current) {
+      window.scrollTo({
+        top: golink.current.offsetTop,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, [response]);
+
+  const goTo = (ref : any) => {
+    window.scrollTo({
+     top:ref.offsetTop,
+     left:0,
+     behavior:'smooth'
+   })
+  }
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -124,6 +144,7 @@ export default function Homepage() {
           />
         </div>
       </form>
+      <div ref={golink}>
       {response && (
         <div>
           <span className="flex justify-between">
@@ -153,6 +174,7 @@ export default function Homepage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
